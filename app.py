@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
-st.set_page_config(page_title="Dashboard Clínico - Bellatriz", layout="wide")
+st.set_page_config(page_title="Dashboard Clínico - Bellatrix", layout="wide")
 st.title("🐾 Dashboard Clínico - Bellatriz")
 st.markdown("Acompanhamento da evolução laboratorial (Leishmaniose e Marcadores Renais).")
 
@@ -27,7 +27,7 @@ fim_glucantime = '2026-07-18'
 
 # --- KPIs (ÚLTIMO EXAME) ---
 st.subheader("📌 Status Atual (Exame de 12/08/2026)")
-k1, k2, k3, k4, k5 = st.columns(5) # Mantive apenas os resumos no topo lado a lado (números, não gráficos)
+k1, k2, k3, k4, k5 = st.columns(5)
 k1.metric("Hematócrito", "48.0 %", "Normal", delta_color="off")
 k2.metric("Plaquetas", "296 mil/mm³", "Normal", delta_color="off")
 k3.metric("Creatinina", "1.2 mg/dL", "Normal", delta_color="off")
@@ -39,7 +39,6 @@ st.markdown("---")
 # --- DESTAQUE PARA O TRATAMENTO ---
 st.success("🟢 **PERÍODO DE TRATAMENTO:** A faixa verde clara em **todos os gráficos abaixo** representa a janela de 40 dias de tratamento com **Glucantime** (08/06 a 18/07).")
 
-# Função auxiliar para padronizar o fundo verde do Glucantime em todos os gráficos
 def adicionar_fundo_glucantime(fig):
     fig.add_vrect(x0=inicio_glucantime, x1=fim_glucantime, fillcolor="green", opacity=0.15, line_width=0, annotation_text="Glucantime (40 dias)", annotation_position="top left")
     return fig
@@ -47,7 +46,7 @@ def adicionar_fundo_glucantime(fig):
 # ================= GRÁFICOS VERTICAIS =================
 
 # 1. Hematócrito
-st.subheader("🩸 Hematócrito (Anemia)")
+st.subheader("🩸 Hematócrito")
 fig_hem = go.Figure()
 fig_hem.add_trace(go.Scatter(x=df['Data'], y=df['Hematócrito'], mode='lines+markers+text', text=df['Hematócrito'], textposition="top center", line=dict(color='firebrick', width=3)))
 fig_hem.add_hrect(y0=37, y1=55, line_width=0, fillcolor="gray", opacity=0.15, annotation_text="Normal (37-55%)")
@@ -58,7 +57,7 @@ st.plotly_chart(fig_hem, use_container_width=True)
 st.markdown("---")
 
 # 2. Leucócitos
-st.subheader("🦠 Leucócitos (Infecção/Inflamação)")
+st.subheader("🦠 Leucócitos")
 fig_leuc = go.Figure()
 fig_leuc.add_trace(go.Scatter(x=df['Data'], y=df['Leucócitos'], mode='lines+markers+text', text=df['Leucócitos'], textposition="top center", line=dict(color='royalblue', width=3)))
 fig_leuc.add_hrect(y0=6, y1=17, line_width=0, fillcolor="gray", opacity=0.15, annotation_text="Normal (6-17)")
@@ -79,11 +78,16 @@ st.plotly_chart(fig_plaq, use_container_width=True)
 
 st.markdown("---")
 
-# 4. Creatinina e Fósforo
+# 4. Creatinina e Fósforo (AGORA COM AS DATAS ALINHADAS CORRETAMENTE)
 st.subheader("💧 Marcadores Renais: Creatinina e Fósforo")
 fig_renal = go.Figure()
-fig_renal.add_trace(go.Scatter(x=df['Data'].dropna(), y=df['Creatinina'].dropna(), mode='lines+markers+text', name='Creatinina', text=df['Creatinina'].dropna(), textposition="bottom center", line=dict(color='purple', width=3)))
-fig_renal.add_trace(go.Scatter(x=df['Data'].dropna(), y=df['Fósforo'].dropna(), mode='lines+markers+text', name='Fósforo', text=df['Fósforo'].dropna(), textposition="top center", line=dict(color='darkorange', width=3)))
+
+# Filtramos os dados corretamente para manter o alinhamento do eixo X
+df_crea = df.dropna(subset=['Creatinina'])
+df_phos = df.dropna(subset=['Fósforo'])
+
+fig_renal.add_trace(go.Scatter(x=df_crea['Data'], y=df_crea['Creatinina'], mode='lines+markers+text', name='Creatinina', text=df_crea['Creatinina'], textposition="bottom center", line=dict(color='purple', width=3)))
+fig_renal.add_trace(go.Scatter(x=df_phos['Data'], y=df_phos['Fósforo'], mode='lines+markers+text', name='Fósforo', text=df_phos['Fósforo'], textposition="top center", line=dict(color='darkorange', width=3)))
 fig_renal.add_hrect(y0=0.5, y1=1.5, line_width=0, fillcolor="purple", opacity=0.1, annotation_text="Ref. Creatinina")
 fig_renal.add_hrect(y0=2.6, y1=6.2, line_width=0, fillcolor="orange", opacity=0.1, annotation_text="Ref. Fósforo")
 fig_renal = adicionar_fundo_glucantime(fig_renal)
@@ -92,10 +96,11 @@ st.plotly_chart(fig_renal, use_container_width=True)
 
 st.markdown("---")
 
-# 5. Ureia
+# 5. Ureia (COM AS DATAS ALINHADAS)
 st.subheader("🧪 Ureia")
 fig_ureia = go.Figure()
-fig_ureia.add_trace(go.Scatter(x=df['Data'].dropna(), y=df['Ureia'].dropna(), mode='lines+markers+text', text=df['Ureia'].dropna(), textposition="top center", line=dict(color='teal', width=3)))
+df_ureia = df.dropna(subset=['Ureia'])
+fig_ureia.add_trace(go.Scatter(x=df_ureia['Data'], y=df_ureia['Ureia'], mode='lines+markers+text', text=df_ureia['Ureia'], textposition="top center", line=dict(color='teal', width=3)))
 fig_ureia.add_hrect(y0=21.4, y1=59.9, line_width=0, fillcolor="gray", opacity=0.15, annotation_text="Normal (21.4-59.9)")
 fig_ureia = adicionar_fundo_glucantime(fig_ureia)
 fig_ureia.update_layout(height=400, margin=dict(t=20, b=20))
@@ -113,11 +118,9 @@ fig_prot = adicionar_fundo_glucantime(fig_prot)
 fig_prot.update_layout(height=400, margin=dict(t=20, b=20))
 st.plotly_chart(fig_prot, use_container_width=True)
 
-st.markdown("---")
-
 st.subheader("📄 Laudos Originais Recentes (PDF)")
 
 c1, c2, c3 = st.columns(3)
-c1.link_button("📊 Hemogramas", "https://drive.google.com/drive/folders/1JQJ_TKomK1efxpeu3OkepfQsd5ZLzIuv?usp=share_link", use_container_width=True)
-c2.link_button("🩸 Bioquímicos e Urinálises", "https://drive.google.com/drive/folders/13mVXsIo-n7cuYqAl9-zmtMGWYsGGB7Dv?usp=share_link", use_container_width=True)
+c1.link_button("🩸 Hemogramas", "https://drive.google.com/drive/folders/1JQJ_TKomK1efxpeu3OkepfQsd5ZLzIuv?usp=share_link", use_container_width=True)
+c2.link_button("📊 Bioquímicos e Urinálises", "https://drive.google.com/drive/folders/13mVXsIo-n7cuYqAl9-zmtMGWYsGGB7Dv?usp=share_link", use_container_width=True)
 c3.link_button("🖥️ Ultrassonografias", "https://drive.google.com/drive/folders/13HG9KhJEQoio_jWBzo4CTAAj2QQn049m?usp=share_link", use_container_width=True)
