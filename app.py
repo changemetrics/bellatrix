@@ -26,13 +26,13 @@ inicio_glucantime = '2026-06-08'
 fim_glucantime = '2026-07-18'
 
 # --- KPIs (ÚLTIMO EXAME) ---
-st.subheader("📌 Status Atual (Exame de 12/08/2026)")
-k1, k2, k3, k4, k5 = st.columns(5)
-k1.metric("Hematócrito", "48.0 %", "Normal", delta_color="off")
-k2.metric("Plaquetas", "296 mil/mm³", "Normal", delta_color="off")
-k3.metric("Creatinina", "1.2 mg/dL", "Normal", delta_color="off")
-k4.metric("Fósforo", "7.0 mg/dL", "Elevado ⚠️", delta_color="inverse")
-k5.metric("Proteínas Totais", "8.1 g/dL", "Atenção", delta_color="inverse")
+# st.subheader("📌 Status Atual (Exame de 12/08/2026)")
+# k1, k2, k3, k4, k5 = st.columns(5)
+# k1.metric("Hematócrito", "48.0 %", "Normal", delta_color="off")
+# k2.metric("Plaquetas", "296 mil/mm³", "Normal", delta_color="off")
+# k3.metric("Creatinina", "1.2 mg/dL", "Normal", delta_color="off")
+# k4.metric("Fósforo", "7.0 mg/dL", "Elevado ⚠️", delta_color="inverse")
+# k5.metric("Proteínas Totais", "8.1 g/dL", "Atenção", delta_color="inverse")
 
 st.markdown("---")
 
