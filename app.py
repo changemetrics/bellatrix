@@ -9,14 +9,14 @@ st.markdown("Acompanhamento da evolução laboratorial (Leishmaniose e Marcadore
 
 # --- DADOS DOS EXAMES ---
 dados = {
-    'Data': ['2026-06-06', '2026-06-16', '2026-07-10', '2026-08-01', '2026-08-12'],
-    'Hematócrito': [24.0, 28.0, 37.6, 52.0, 48.0],
-    'Leucócitos': [41.5, 6.5, 7.95, 9.2, 4.9],
-    'Plaquetas': [148, 151, 346, 248, 296],
-    'Creatinina': [None, 1.0, 0.8, 1.7, 1.2],
-    'Ureia': [None, 51.0, 16.0, 53.4, 41.4],
-    'Fósforo': [None, None, 5.8, 7.2, 7.0],
-    'Proteinas': [10.2, None, None, 9.9, 8.1]
+    'Data': ['2026-06-06', '2026-06-16', '2026-07-10', '2026-08-01', '2026-08-12', '2026-09-01'],
+    'Hematócrito': [24.0, 28.0, 37.6, 52.0, 48.0, 35.6],
+    'Leucócitos': [41.5, 6.5, 7.95, 9.2, 4.9, 6.7],
+    'Plaquetas': [148, 151, 346, 248, 296, 609],
+    'Creatinina': [None, 1.0, 0.8, 1.7, 1.2, None],
+    'Ureia': [None, 51.0, 16.0, 53.4, 41.4, None],
+    'Fósforo': [None, None, 5.8, 7.2, 7.0, None],
+    'Proteinas': [10.2, None, None, 9.9, 8.1, None]
 }
 df = pd.DataFrame(dados)
 df['Data'] = pd.to_datetime(df['Data'])
